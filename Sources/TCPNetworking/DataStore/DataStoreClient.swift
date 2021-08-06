@@ -17,6 +17,7 @@ public class DataStoreClient: ClientDelegate {
         self.client = Client(host: host, port: port, delegate: self)
         
         self.client.clientHandler.register(type: DataStoreServerToClient.SetResponse.self)
+        self.client.clientHandler.register(type: DataStoreServerToClient.GetResponse)
     }
     
     func connectionEnded() {
