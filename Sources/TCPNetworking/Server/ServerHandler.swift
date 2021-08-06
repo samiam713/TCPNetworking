@@ -80,7 +80,7 @@ final class ServerHandler: ChannelInboundHandler {
     
     func remove(context: ChannelHandlerContext) {
         print("remove called")
-        if channelToData == nil {return}
+        if channelToData[context.channel.id] == nil {return}
         channelToData[context.channel.id] = nil
         context.close(promise: nil)
         delegate.connectionEnded(channel: context.channel)
