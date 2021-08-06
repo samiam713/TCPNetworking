@@ -26,17 +26,11 @@ public class DataStoreServer: ServerDelegate {
         server.setupAndListenForever()
     }
     
-    func connectionStarted(channel: Channel) {
-        return
-    }
+    func connectionStarted(channel: Channel) {print("Connection Started")}
     
-    func connectionEnded(channel: Channel) {
-        return
-    }
+    func connectionEnded(channel: Channel) {print("Connection Ended")}
     
-    func messageReceived(message: ClientToServer, from: Channel) {
-        
-    }
+    func messageReceived(message: ClientToServer, from: Channel) {}
     
     func triggerReceived(trigger: ClientToServer & Trigger, from: Channel) {
         if let setRequest = trigger as? DataStoreClientToServer.SetRequest {
