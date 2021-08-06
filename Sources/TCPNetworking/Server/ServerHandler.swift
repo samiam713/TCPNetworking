@@ -67,6 +67,8 @@ final class ServerHandler: ChannelInboundHandler {
                     print("Received bad JSON Data or Invalid message type from channel...removing it")
                     remove(context: context)
                 }
+                
+                serverData.messageFragment.reset()
             }
         }
     }
@@ -78,6 +80,7 @@ final class ServerHandler: ChannelInboundHandler {
     
     func remove(context: ChannelHandlerContext) {
         print("remove called")
+        if channelToData == nil {return}
         channelToData[context.channel.id] = nil
         context.close(promise: nil)
         delegate.connectionEnded(channel: context.channel)

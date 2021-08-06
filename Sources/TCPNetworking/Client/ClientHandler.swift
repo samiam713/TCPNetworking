@@ -66,6 +66,7 @@ public final class ClientHandler: ChannelInboundHandler {
                     print("Received bad JSON Data or Invalid message type from channel...shutting down")
                     self.shutdown(context: context)
                 }
+                serverData.messageFragment.reset()
             }
         }
     }
