@@ -9,7 +9,7 @@ import Foundation
 import NIO
 
 /// The logical way to represent a client
-class Client {
+public class Client {
     
     let host: String
     let port: Int
@@ -22,16 +22,23 @@ class Client {
     var clientHandler: ClientHandler! = nil
     
     var group: MultiThreadedEventLoopGroup? = nil
-
     
-    init(host: String, port: Int, delegate: ClientDelegate) {
+    public init(host: String, port: Int, delegate: ClientDelegate) {
         self.host = host
         self.port = port
         
         self.delegate = delegate
     }
     
-    func setup() {
+    public enum SetupResult {
+        case success
+        case alreadyActive
+        case failure
+    }
+    /// returns: true iff we we successfully set up
+    public func setup() -> SetupResult {
+        if active {return .alreadyActive}
+        
         self.clientHandler = ClientHandler(delegate: delegate, client: self)
         
         let group = MultiThreadedEventLoopGroup(numberOfThreads: min(System.coreCount,2))
@@ -43,13 +50,17 @@ class Client {
                 channel.pipeline.addHandler(self.clientHandler)
             }
         
-        self.channel = try? bootstrap.connect(host: host, port: port).wait()
+        guard let channel = try? bootstrap.connect(host: host, port: port).wait() else {return .failure}
+        self.channel = channel
         
         active = true
+        return .success
     }
     
     /// check if delegate methods still get called when this is called
-    func shutdown() {
+    public func shutdown() {
+        if !active {return}
+        
         try? channel?.close().wait()
         try? group?.syncShutdownGracefully()
         channel = nil

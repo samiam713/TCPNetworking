@@ -86,7 +86,7 @@ public final class ClientHandler: ChannelInboundHandler {
     }
 }
 
-protocol ClientDelegate: AnyObject {
+public protocol ClientDelegate: AnyObject {
     
     
     /// must be unowned

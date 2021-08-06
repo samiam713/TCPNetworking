@@ -9,26 +9,29 @@ import Foundation
 import NIO
 
 public class DataStoreClient: ClientDelegate {
-    var clientHandler: ClientHandler?
+    public var clientHandler: ClientHandler?
     
     var client: Client! = nil
     
-    public init(host: String, port: Int) {
+    public init?(host: String, port: Int) {
         self.client = Client(host: host, port: port, delegate: self)
+        let setup = self.client.setup()
+        guard setup == .success else {return nil}
         
-        self.client.clientHandler.register(type: DataStoreServerToClient.SetResponse.self)
-        self.client.clientHandler.register(type: DataStoreServerToClient.GetResponse)
+        guard let clientHandler = self.clientHandler else {return nil}
+        clientHandler.register(type: DataStoreServerToClient.SetResponse.self)
+        clientHandler.register(type: DataStoreServerToClient.GetResponse.self)
     }
     
-    func connectionEnded() {
-        print("Error...we got kicked but shouldn't have")
+    public func connectionEnded() {
+        print("Logic Error in DataStoreClient.swift: Got kicked but shouldn't have")
     }
     
-    func messageReceived(message: ServerToClient, from: Channel) {
+    public func messageReceived(message: ServerToClient, from: Channel) {
         
     }
     
-    func triggerReceived(response: ServerToClient & Trigger, from: Channel) {
+    public func triggerReceived(response: ServerToClient & Trigger, from: Channel) {
         
     }
     
