@@ -16,8 +16,8 @@ public class DataStoreServer: ServerDelegate {
     
     var data = [String:Data]()
     
-    public init() {
-        self.server = Server(host: "localhost", port: 9999, delegate: self)
+    public init(host: String, port: Int) {
+        self.server = Server(host: host, port: port, delegate: self)
         self.server.serverHandler.register(type: DataStoreClientToServer.SetRequest.self)
         self.server.serverHandler.register(type: DataStoreClientToServer.GetRequest.self)
     }
