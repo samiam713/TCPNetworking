@@ -68,7 +68,7 @@ final class ServerHandler: ChannelInboundHandler {
                     remove(context: context)
                 }
                 
-                serverData.messageFragment.reset()
+                channelData.messageFragment.reset()
             }
         }
     }
