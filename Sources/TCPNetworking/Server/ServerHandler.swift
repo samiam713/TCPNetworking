@@ -51,6 +51,7 @@ final class ServerHandler: ChannelInboundHandler {
             
             if receiveResult {
                 let fragment = channelData.messageFragment
+                print(String(data: fragment.jsonData, encoding: .utf8) ?? "Receive Data Not Decodable to .utf8")
                 if let decoder = decoders[fragment.messageType], let message = decoder(fragment.jsonData) {
                     if let response = message as? ClientToServer & Response {
                         if let handler = channelToData[context.channel.id]?.pendingResponses[response.id] {
@@ -71,10 +72,12 @@ final class ServerHandler: ChannelInboundHandler {
     }
 
     func errorCaught(context: ChannelHandlerContext, error: Error) {
+        print("errorCaught called")
         remove(context: context)
     }
     
     func remove(context: ChannelHandlerContext) {
+        print("remove called")
         channelToData[context.channel.id] = nil
         context.close(promise: nil)
         delegate.connectionEnded(channel: context.channel)

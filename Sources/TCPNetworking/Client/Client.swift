@@ -61,7 +61,7 @@ public class Client {
     public func shutdown() {
         if !active {return}
         
-        try? channel?.close().wait()
+        _ = channel?.close()
         try? group?.syncShutdownGracefully()
         channel = nil
         clientHandler = nil
